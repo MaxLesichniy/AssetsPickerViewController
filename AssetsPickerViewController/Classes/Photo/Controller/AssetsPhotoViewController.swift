@@ -11,7 +11,7 @@ import Photos
 import PhotosUI
 import TinyLog
 import Device
-
+import RDHCollectionViewGridLayout
 // MARK: - AssetsPhotoViewController
 open class AssetsPhotoViewController: UIViewController {
     
@@ -32,10 +32,10 @@ open class AssetsPhotoViewController: UIViewController {
         let buttonItem = UIBarButtonItem(title: String(key: "Done"), style: .plain, target: self, action: #selector(pressedDone(button:)))
         return buttonItem
     }()
-    fileprivate let emptyView: AssetsEmptyView = {
+    public let emptyView: AssetsEmptyView = {
         return AssetsEmptyView.newAutoLayout()
     }()
-    fileprivate let noPermissionView: AssetsNoPermissionView = {
+    public let noPermissionView: AssetsNoPermissionView = {
         return AssetsNoPermissionView.newAutoLayout()
     }()
     
@@ -323,13 +323,15 @@ extension AssetsPhotoViewController {
     }
     
     func updateLayout(layout: UICollectionViewLayout, isPortrait: Bool? = nil) {
-        guard let flowLayout = layout as? UICollectionViewFlowLayout else { return }
+        guard let flowLayout = layout as? RDHCollectionViewGridLayout else { return }
         if let isPortrait = isPortrait {
             self.isPortrait = isPortrait
         }
-        flowLayout.itemSize = self.isPortrait ? pickerConfig.assetPortraitCellSize(forViewSize: UIScreen.main.portraitContentSize) : pickerConfig.assetLandscapeCellSize(forViewSize: UIScreen.main.landscapeContentSize)
-        flowLayout.minimumLineSpacing = self.isPortrait ? pickerConfig.assetPortraitLineSpace : pickerConfig.assetLandscapeLineSpace
-        flowLayout.minimumInteritemSpacing = self.isPortrait ? pickerConfig.assetPortraitInteritemSpace : pickerConfig.assetLandscapeInteritemSpace
+        flowLayout.lineSpacing = self.isPortrait ? pickerConfig.assetPortraitLineSpace : pickerConfig.assetLandscapeLineSpace
+        flowLayout.itemSpacing = self.isPortrait ? pickerConfig.assetPortraitInteritemSpace : pickerConfig.assetLandscapeInteritemSpace
+//        flowLayout.itemSize = self.isPortrait ? pickerConfig.assetPortraitCellSize(forViewSize: UIScreen.main.portraitContentSize) : pickerConfig.assetLandscapeCellSize(forViewSize: UIScreen.main.landscapeContentSize)
+//        flowLayout.minimumLineSpacing = self.isPortrait ? pickerConfig.assetPortraitLineSpace : pickerConfig.assetLandscapeLineSpace
+//        flowLayout.minimumInteritemSpacing = self.isPortrait ? pickerConfig.assetPortraitInteritemSpace : pickerConfig.assetLandscapeInteritemSpace
     }
     
     func setSelectedAssets(assets: [PHAsset]) {
@@ -731,7 +733,8 @@ extension AssetsPhotoViewController: AssetsManagerDelegate {
     
     public func assetsManager(manager: AssetsManager, insertedAssets assets: [PHAsset], at indexPaths: [IndexPath]) {
         logi("insertedAssets at: \(indexPaths)")
-        collectionView.insertItems(at: indexPaths)
+//        collectionView.insertItems(at: indexPaths)
+        collectionView.reloadData()
         updateFooter()
     }
     
@@ -743,7 +746,8 @@ extension AssetsPhotoViewController: AssetsManagerDelegate {
                 selectedMap.removeValue(forKey: removedAsset.localIdentifier)
             }
         }
-        collectionView.deleteItems(at: indexPaths)
+//        collectionView.deleteItems(at: indexPaths)
+        collectionView.reloadData()
         updateSelectionCount()
         updateNavigationStatus()
         updateFooter()

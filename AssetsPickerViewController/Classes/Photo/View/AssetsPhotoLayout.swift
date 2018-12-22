@@ -9,8 +9,9 @@
 import UIKit
 import Device
 import TinyLog
+import RDHCollectionViewGridLayout
 
-open class AssetsPhotoLayout: UICollectionViewFlowLayout {
+open class AssetsPhotoLayout: RDHCollectionViewGridLayout {
     
     open var translatedOffset: CGPoint?
     fileprivate var pickerConfig: AssetsPickerConfig

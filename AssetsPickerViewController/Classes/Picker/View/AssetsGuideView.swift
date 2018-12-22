@@ -16,7 +16,7 @@ open class AssetsGuideView: UIView {
     var titleStyle: UIFontTextStyle = .title1
     var bodyStyle: UIFontTextStyle = .body
     
-    fileprivate lazy var messageLabel: UILabel = {
+    lazy var messageLabel: UILabel = {
         let label = UILabel.newAutoLayout()
         label.textAlignment = .center
         label.numberOfLines = 10
@@ -40,7 +40,9 @@ open class AssetsGuideView: UIView {
     
     open override func updateConstraints() {
         if !didSetupConstraints {
-            messageLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15))
+            messageLabel.autoCenterInSuperview()
+            messageLabel.autoPinEdge(toSuperviewEdge: .left, withInset: 15)
+//            messageLabel.autoPinEdgesToSuperviewEdges(with: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15))
             didSetupConstraints = true
         }
         super.updateConstraints()
